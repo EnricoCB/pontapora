@@ -13,12 +13,15 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final JWTService jwtService;
+
     private final AuthenticationManager authenticationManager;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, AuthenticationManager authenticationManager, BCryptPasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, JWTService jwtService, AuthenticationManager authenticationManager, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.passwordEncoder = passwordEncoder;
     }
@@ -35,8 +38,7 @@ public class UserService {
                     new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
             );
             if (authentication.isAuthenticated()) {
-                //TODO gerar token JWT
-                return "Success";
+                return jwtService.generateToken(user.getEmail());
             }
         } catch (Exception e) {
             //TODO lançar exceção
