@@ -28,6 +28,10 @@ public class UserService {
 
     public User register(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //TODO verificar se ususario existe
+
+
+
         return userRepository.save(user);
     }
 
